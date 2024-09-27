@@ -1,22 +1,63 @@
+const express = require('express')
+
+
 const router = require('express').Router()
+const Account = require('./accounts-model')
+
+function checkId(req,res,next) {
+  next()
+}
+
+function checkPayload(req, res, next) {
+  next()
+}
 
 router.get('/', async (req, res, next) => {
+  try{
+    const data = await Account.getAll()
+    res.json(data)
+  } catch (err) {
+    next(err)
+  }
   // DO YOUR MAGIC
 })
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id',checkId, async (req, res, next) => {
+  try{
+    const data = await Account.getById(req.params.id)
+    res.json(data)
+  } catch (err) {
+    next(err)
+  }
   // DO YOUR MAGIC
 })
 
-router.post('/', (req, res, next) => {
+router.post('/',checkPayload, async (req, res, next) => {
+  try{
+    const data = await Account.create(req.body)
+    res.json(data)
+  } catch (err) {
+    next(err)
+  }
   // DO YOUR MAGIC
 })
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id',checkPayload, checkId, async (req, res, next) => {
+  try{
+    const data = await Account.updateById(req.params.id, req.body)
+  } catch (err) {
+    next(err)
+  }
   // DO YOUR MAGIC
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id',checkId, async  (req, res, next) => {
+  try{
+    const data = await Account.remove(req.params.id)
+    res.json(data)
+  } catch (err) {
+    next(err)
+  }
   // DO YOUR MAGIC
 })
 
